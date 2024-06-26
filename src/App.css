@@ -1,0 +1,64 @@
+#root {
+  /* max-width: 1280px; */
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  width: 100%;
+  background-color: rgb(49, 50, 51);
+}
+.form{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 90%;
+}
+.title{
+  height: 40px;
+  font-size: 20px;
+}
+.author{
+  height: 40px;
+  font-size: 20px;
+}
+.year{
+  height: 40px;
+  font-size: 20px;
+}
+.table{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 20px, 0;
+  width:70%;
+}
+.container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+  width: 100%;
+}
+.input{
+  height: 40px;
+  font-size: 20px;
+  width: 100%;
+}
+.search-bar{
+  width: 70%;
+  height: 30px;
+}
+.actions{
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  
+}
+.pagination{
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 30px;
+}
