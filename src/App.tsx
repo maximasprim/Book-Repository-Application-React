@@ -1,10 +1,4 @@
-import  {
-  useReducer,
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-} from "react";
+import { useReducer, useState, useRef, useEffect, useCallback } from "react";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { bookReducer } from "./components/bookReducer";
 import "./App.css";
@@ -38,15 +32,31 @@ function App() {
     setStoredBooks(books);
   }, [books]);
 
+  // useEffect(() => {
+  //   // Fetch books data from the API
+  //   axios.get("https://api.example.com/books")
+  //     .then(response => {
+  //       dispatch({ type: "LOAD_BOOKS", books: response.data });
+  //     })
+  //     .catch(error => {
+  //       console.error("Error fetching books:", error);
+  //     });
+  // }, []);
+
   const handleAddBook = () => {
     if (titleRef.current && authorRef.current && yearRef.current) {
       const title = titleRef.current.value;
       const author = authorRef.current.value;
       const year = parseInt(yearRef.current.value, 10);
-      dispatch({ type: "ADD_BOOK", book: {
-        title, author, year,
-        id: 0
-      } });
+      dispatch({
+        type: "ADD_BOOK",
+        book: {
+          title,
+          author,
+          year,
+          id: 0,
+        },
+      });
       titleRef.current.value = "";
       authorRef.current.value = "";
       yearRef.current.value = "";
@@ -57,7 +67,7 @@ function App() {
     if (titleRef.current && authorRef.current && yearRef.current) {
       const title = titleRef.current.value || "";
       const author = authorRef.current.value || "";
-      const year = parseInt(yearRef.current.value || '0', 10);
+      const year = parseInt(yearRef.current.value || "0", 10);
       dispatch({ type: "UPDATE_BOOK", book: { id, title, author, year } });
     }
   };
@@ -140,16 +150,15 @@ function App() {
                 <td>
                   <div className="actions">
                     <div className="edit">
-                    <button onClick={() => handleUpdateBook(book.id)}>
-                      Edit
-                    </button>
+                      <button onClick={() => handleUpdateBook(book.id)}>
+                        Edit
+                      </button>
                     </div>
                     <div className="delete">
-                    <button onClick={() => handleDeleteBook(book.id)}>
-                      Delete
-                    </button>
+                      <button onClick={() => handleDeleteBook(book.id)}>
+                        Delete
+                      </button>
                     </div>
-                    
                   </div>
                 </td>
               </tr>
