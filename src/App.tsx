@@ -1,7 +1,7 @@
 import { useReducer, useState, useRef, useEffect, useCallback } from "react";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { bookReducer } from "./components/bookReducer";
-import { fetchBooks, updateBook, addBook } from "./components/apiservice";
+import { fetchBooks, updateBook, addBook, deleteBook } from "./components/apiservice";
 import "./App.css";
 
 interface Book {
@@ -62,7 +62,7 @@ function App() {
 
       if (editMode && editBookId !== null) {
         try {
-          await updateBook(editBookId, title);
+          await updateBook(editBookId, title, author, year);
           dispatch({
             type: "UPDATE_BOOK",
             book: {
@@ -103,8 +103,13 @@ function App() {
     }
   };
 
-  const handleDeleteBook = (id: number) => {
-    dispatch({ type: "DELETE_BOOK", id });
+  const handleDeleteBook = async (id: number) => {
+    try {
+      await deleteBook(id);
+      dispatch({ type: "DELETE_BOOK", id });
+    } catch (error) {
+      console.error("Error deleting book:", error);
+    }
   };
 
   const filteredBooks = books
