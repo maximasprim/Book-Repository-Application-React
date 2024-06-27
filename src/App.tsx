@@ -1,6 +1,7 @@
 import { useReducer, useState, useRef, useEffect, useCallback } from "react";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { bookReducer } from "./components/bookReducer";
+import { fetchBooks, updateBook, addBook } from "./components/apiservice";
 import "./App.css";
 
 interface Book {
@@ -26,10 +27,18 @@ function App() {
 
   const booksPerPage = 5;
 
+  // Fetch books from the API when the component mounts
   useEffect(() => {
-    if (storedBooks.length) {
-      dispatch({ type: "LOAD_BOOKS", books: storedBooks });
-    }
+    const loadBooks = async () => {
+      try {
+        const booksData = await fetchBooks();
+        console.log("Books data:", booksData);
+        dispatch({ type: "LOAD_BOOKS", books: booksData });
+      } catch (error) {
+        console.error("Error fetching books:", error);
+      }
+    };
+    loadBooks();
   }, []);
 
   useEffect(() => {
@@ -44,7 +53,7 @@ function App() {
     if (yearRef.current) yearRef.current.value = book.year.toString();
   };
 
-  const handleSaveBook = () => {
+  const handleSaveBook = async () => {
     if (titleRef.current && authorRef.current && yearRef.current) {
       const title = titleRef.current.value;
       const author = authorRef.current.value;
@@ -52,28 +61,39 @@ function App() {
       const addedDate = new Date().toISOString();
 
       if (editMode && editBookId !== null) {
-        dispatch({
-          type: "UPDATE_BOOK",
-          book: {
-            id: editBookId,
-            title,
-            author,
-            year,
-            addedDate,
-          },
-        });
+        try {
+          await updateBook(editBookId, title);
+          dispatch({
+            type: "UPDATE_BOOK",
+            book: {
+              id: editBookId,
+              title,
+              author,
+              year,
+              addedDate,
+            },
+          });
+        } catch (error) {
+          console.error("Error updating book:", error);
+        }
       } else {
-        dispatch({
-          type: "ADD_BOOK",
-          book: {
-            id: 0,
-            title,
-            author,
-            year,
-            addedDate,
-          },
-        });
+        try {
+          const newBook = await addBook({ title, author, year, addedDate });
+          dispatch({
+            type: "ADD_BOOK",
+            book: {
+              id: newBook.id,
+              title,
+              author,
+              year,
+              addedDate,
+            },
+          });
+        } catch (error) {
+          console.error("Error adding book:", error);
+        }
       }
+
 
       setEditMode(false);
       setEditBookId(null);
